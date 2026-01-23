@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Head from 'next/head'
+import Image from 'next/image'
 import Link from 'next/link'
 import SectionHeader from '@/components/ui/SectionHeader'
 import { ArrowRight, ArrowUpRight, Check } from '@/components/ui/Icons'
@@ -68,31 +69,46 @@ export default function Products() {
       {/* Hero */}
       <section className="pt-32 pb-20 bg-gradient-to-b from-marble-cream to-white">
         <div className="container-wide">
-          <div className="max-w-3xl">
-            <p className="text-sm font-medium tracking-widest uppercase text-stone-500 mb-4">
-              Our Materials
-            </p>
-            <h1 className="font-display text-display-sm md:text-display text-stone-900">
-              Premium natural stone for every application
-            </h1>
-            <p className="mt-6 text-lg text-stone-600 leading-relaxed">
-              We supply a comprehensive range of natural stone materials sourced from established
-              quarries worldwide. Each material is selected for quality, consistency, and
-              availability in commercial quantities.
-            </p>
-          </div>
+          <div className="grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-12 items-center">
+            <div className="max-w-3xl">
+              <p className="text-sm font-medium tracking-widest uppercase text-stone-500 mb-4">
+                Our Materials
+              </p>
+              <h1 className="font-display text-display-sm md:text-display text-stone-900">
+                Premium natural stone for every application
+              </h1>
+              <p className="mt-6 text-lg text-stone-600 leading-relaxed">
+                We supply a comprehensive range of natural stone materials sourced from established
+                quarries worldwide. Each material is selected for quality, consistency, and
+                availability in commercial quantities.
+              </p>
 
-          {/* Quick Nav */}
-          <div className="mt-12 flex flex-wrap gap-3">
-            {productCategories.map((category) => (
-              <a
-                key={category.id}
-                href={`#${category.id}`}
-                className="px-5 py-2.5 text-sm font-medium bg-white border border-stone-200 text-stone-700 hover:border-stone-400 hover:text-stone-900 transition-colors"
-              >
-                {category.name}
-              </a>
-            ))}
+              {/* Quick Nav */}
+              <div className="mt-12 flex flex-wrap gap-3">
+                {productCategories.map((category) => (
+                  <a
+                    key={category.id}
+                    href={`#${category.id}`}
+                    className="px-5 py-2.5 text-sm font-medium bg-white border border-stone-200 text-stone-700 hover:border-stone-400 hover:text-stone-900 transition-colors"
+                  >
+                    {category.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="aspect-[4/3] bg-stone-100 overflow-hidden">
+                <Image
+                  src="/images/quarry.jpeg"
+                  alt="Marble quarry with stone blocks"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                  priority
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
