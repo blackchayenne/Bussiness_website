@@ -11,6 +11,35 @@ export default function Products() {
   const [lightboxImage, setLightboxImage] = useState(null)
   const [loadedImages, setLoadedImages] = useState({})
   const [failedImages, setFailedImages] = useState({})
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: siteUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Products',
+        item: `${siteUrl}/products`,
+      },
+    ],
+  }
+
+  const productListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: productCategories.map((category, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: category.name,
+      url: `${siteUrl}/products#${category.id}`,
+    })),
+  }
 
   return (
     <>
@@ -37,6 +66,14 @@ export default function Products() {
           content="Browse our selection of premium marble, granite, travertine, and limestone. Direct quarry sourcing with consistent quality for international projects."
         />
         <meta name="twitter:image" content={ogImage} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(productListSchema) }}
+        />
       </Head>
 
       {/* Lightbox Modal */}

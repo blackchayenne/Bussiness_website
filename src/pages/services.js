@@ -13,6 +13,40 @@ const serviceIcons = {
 }
 
 export default function Services() {
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: siteUrl,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Services',
+        item: `${siteUrl}/services`,
+      },
+    ],
+  }
+
+  const serviceListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: services.map((service, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'Service',
+        name: service.name,
+        description: service.tagline,
+        url: `${siteUrl}/services#${service.id}`,
+      },
+    })),
+  }
+
   return (
     <>
       <Head>
@@ -38,6 +72,14 @@ export default function Services() {
           content="Comprehensive stone supply services: quality control, project management, sourcing, and international logistics. End-to-end support for your projects."
         />
         <meta name="twitter:image" content={ogImage} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceListSchema) }}
+        />
       </Head>
 
       {/* Hero */}
