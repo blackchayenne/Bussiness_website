@@ -72,7 +72,7 @@ export default function Home() {
             <h1 className="font-display text-display-sm sm:text-display md:text-display-lg text-stone-900 animate-fade-in-up">
               Premium stone for
               <br />
-              <span className="text-stone-500">international projects</span>
+              <span className="text-stone-500">international projects worldwide</span>
             </h1>
             <p className="mt-8 text-xl text-stone-600 max-w-2xl leading-relaxed animate-fade-in-up" style={{ animationDelay: '100ms' }}>
               We supply marble, granite, travertine, and limestone to contractors and developers worldwide.
