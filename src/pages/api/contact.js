@@ -1,14 +1,6 @@
-/**
- * Contact Form API Handler
- *
- * This is a placeholder API route for handling contact form submissions.
- * In production, you would integrate this with:
- * - An email service (SendGrid, AWS SES, Resend, etc.)
- * - A CRM system
- * - A database for lead tracking
- *
- * For now, it validates the input and simulates a successful submission.
- */
+import { Resend } from 'resend'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -28,80 +20,44 @@ export default async function handler(req, res) {
       message,
     } = req.body
 
-    // Basic validation
     if (!name || !company || !email || !country || !message) {
-      return res.status(400).json({
-        message: 'Missing required fields'
-      })
+      return res.status(400).json({ message: 'Missing required fields' })
     }
 
-    // Email format validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({
-        message: 'Invalid email format'
-      })
-    }
-
-    // In production, you would:
-    // 1. Send notification email to sales team
-    // 2. Send confirmation email to the inquirer
-    // 3. Store the lead in a database/CRM
-
-    // Example with a generic email service (pseudo-code):
-    /*
-    await sendEmail({
-      to: process.env.SALES_EMAIL,
-      subject: `New Inquiry from ${company} - ${country}`,
-      template: 'new-inquiry',
-      data: {
-        name,
-        company,
-        email,
-        phone,
-        country,
-        projectType,
-        volume,
-        materials,
-        message,
-        timestamp: new Date().toISOString(),
-      }
+    // 1️⃣ Sana (sales) mail
+    await resend.emails.send({
+      from: 'Website <onboarding@resend.dev>',
+      to: [process.env.SALES_EMAIL],
+      subject: `New Inquiry – ${company} (${country})`,
+      html: `
+        <h2>New Inquiry</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Company:</strong> ${company}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone || '-'}</p>
+        <p><strong>Country:</strong> ${country}</p>
+        <p><strong>Project Type:</strong> ${projectType || '-'}</p>
+        <p><strong>Volume:</strong> ${volume || '-'}</p>
+        <p><strong>Materials:</strong> ${materials || '-'}</p>
+        <p><strong>Message:</strong><br/>${message}</p>
+      `,
     })
 
-    await sendEmail({
-      to: email,
-      subject: 'Thank you for your inquiry - MarbleSource',
-      template: 'inquiry-confirmation',
-      data: { name }
-    })
-    */
-
-    // Log the inquiry (in production, store in database)
-    console.log('New inquiry received:', {
-      name,
-      company,
-      email,
-      phone: phone || 'Not provided',
-      country,
-      projectType: projectType || 'Not specified',
-      volume: volume || 'Not specified',
-      materials: materials || 'Not specified',
-      message,
-      timestamp: new Date().toISOString(),
+    // 2️⃣ Müşteriye confirmation mail
+    await resend.emails.send({
+      from: 'Marble Professionals <onboarding@resend.dev>',
+      to: [email],
+      subject: 'We received your inquiry',
+      html: `
+        <p>Dear ${name},</p>
+        <p>Thank you for contacting us. We received your inquiry and will get back to you within 24 hours.</p>
+        <p>Best regards,<br/>Marble Professionals</p>
+      `,
     })
 
-    // Simulate processing time
-    await new Promise(resolve => setTimeout(resolve, 500))
-
-    return res.status(200).json({
-      success: true,
-      message: 'Inquiry submitted successfully'
-    })
-
+    return res.status(200).json({ success: true })
   } catch (error) {
-    console.error('Contact form error:', error)
-    return res.status(500).json({
-      message: 'Internal server error'
-    })
+    console.error(error)
+    return res.status(500).json({ message: 'Email sending failed' })
   }
 }
