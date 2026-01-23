@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import SectionHeader from '@/components/ui/SectionHeader'
 import { ArrowRight, Mail, Phone, MapPin, Check } from '@/components/ui/Icons'
+import { siteName, siteUrl, ogImage } from '@/lib/seo'
 
 const projectTypes = [
   'Residential Development',
@@ -21,6 +22,33 @@ const volumeRanges = [
   'Ongoing supply contract',
 ]
 
+const faqItems = [
+  {
+    q: 'Do you provide samples?',
+    a: 'Yes, we provide physical samples for approved inquiries. Sample costs vary by material and are typically credited against orders.',
+  },
+  {
+    q: 'What are your payment terms?',
+    a: 'Standard terms are 30% deposit with order confirmation, 70% before shipment. Letters of Credit accepted for established clients.',
+  },
+  {
+    q: 'How long is the typical lead time?',
+    a: 'Standard orders take 3-6 weeks from confirmation, depending on material and processing requirements. We provide specific timelines with every quote.',
+  },
+  {
+    q: 'Do you handle shipping?',
+    a: 'We offer both FOB and CIF terms. Our logistics team coordinates container booking, documentation, and tracking for CIF orders.',
+  },
+  {
+    q: 'Can you source materials not listed on your site?',
+    a: "Yes, our sourcing network extends beyond what's listed. If you have a specific material in mind, let us know and we'll check availability.",
+  },
+  {
+    q: 'How can I reach you quickly?',
+    a: 'The fastest way to reach us is via WhatsApp at +90 532 406 99 97. We typically respond within a few hours during business days.',
+  },
+]
+
 export default function Contact() {
   const router = useRouter()
   const [formState, setFormState] = useState({
@@ -37,6 +65,19 @@ export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState('')
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.a,
+      },
+    })),
+  }
 
   // Pre-fill from URL params
   useEffect(() => {
@@ -90,6 +131,27 @@ export default function Contact() {
         <meta
           name="description"
           content="Get in touch for stone sourcing inquiries, project quotes, and partnership discussions. We respond within 24 hours."
+        />
+        <link rel="canonical" href={`${siteUrl}/contact`} />
+        <meta property="og:title" content="Contact Us | Request a Quote | Marble Professionals" />
+        <meta
+          property="og:description"
+          content="Get in touch for stone sourcing inquiries, project quotes, and partnership discussions. We respond within 24 hours."
+        />
+        <meta property="og:url" content={`${siteUrl}/contact`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={siteName} />
+        <meta property="og:image" content={ogImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Contact Us | Request a Quote | Marble Professionals" />
+        <meta
+          name="twitter:description"
+          content="Get in touch for stone sourcing inquiries, project quotes, and partnership discussions. We respond within 24 hours."
+        />
+        <meta name="twitter:image" content={ogImage} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
         />
       </Head>
 
@@ -410,32 +472,7 @@ export default function Contact() {
           />
 
           <div className="mt-12 grid md:grid-cols-2 gap-8">
-            {[
-              {
-                q: 'Do you provide samples?',
-                a: 'Yes, we provide physical samples for approved inquiries. Sample costs vary by material and are typically credited against orders.',
-              },
-              {
-                q: 'What are your payment terms?',
-                a: 'Standard terms are 30% deposit with order confirmation, 70% before shipment. Letters of Credit accepted for established clients.',
-              },
-              {
-                q: 'How long is the typical lead time?',
-                a: 'Standard orders take 3-6 weeks from confirmation, depending on material and processing requirements. We provide specific timelines with every quote.',
-              },
-              {
-                q: 'Do you handle shipping?',
-                a: 'We offer both FOB and CIF terms. Our logistics team coordinates container booking, documentation, and tracking for CIF orders.',
-              },
-              {
-                q: 'Can you source materials not listed on your site?',
-                a: 'Yes, our sourcing network extends beyond what\'s listed. If you have a specific material in mind, let us know and we\'ll check availability.',
-              },
-              {
-                q: 'How can I reach you quickly?',
-                a: 'The fastest way to reach us is via WhatsApp at +90 532 406 99 97. We typically respond within a few hours during business days.',
-              },
-            ].map((faq) => (
+            {faqItems.map((faq) => (
               <div key={faq.q} className="bg-white p-6">
                 <h3 className="font-medium text-stone-900">{faq.q}</h3>
                 <p className="mt-3 text-sm text-stone-600 leading-relaxed">{faq.a}</p>

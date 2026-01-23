@@ -3,6 +3,7 @@ import Link from 'next/link'
 import SectionHeader from '@/components/ui/SectionHeader'
 import { ArrowRight, Check, Shield, Globe, Truck, ClipboardCheck } from '@/components/ui/Icons'
 import { services } from '@/data/services'
+import { siteName, siteUrl, ogImage } from '@/lib/seo'
 
 const serviceIcons = {
   quality: Shield,
@@ -20,6 +21,23 @@ export default function Services() {
           name="description"
           content="Comprehensive stone supply services: quality control, project management, sourcing, and international logistics. End-to-end support for your projects."
         />
+        <link rel="canonical" href={`${siteUrl}/services`} />
+        <meta property="og:title" content="Services | Quality Control, Logistics & Project Management | Marble Professionals" />
+        <meta
+          property="og:description"
+          content="Comprehensive stone supply services: quality control, project management, sourcing, and international logistics. End-to-end support for your projects."
+        />
+        <meta property="og:url" content={`${siteUrl}/services`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={siteName} />
+        <meta property="og:image" content={ogImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Services | Quality Control, Logistics & Project Management | Marble Professionals" />
+        <meta
+          name="twitter:description"
+          content="Comprehensive stone supply services: quality control, project management, sourcing, and international logistics. End-to-end support for your projects."
+        />
+        <meta name="twitter:image" content={ogImage} />
       </Head>
 
       {/* Hero */}

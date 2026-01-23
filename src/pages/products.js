@@ -4,6 +4,7 @@ import Link from 'next/link'
 import SectionHeader from '@/components/ui/SectionHeader'
 import { ArrowRight, ArrowUpRight, Check } from '@/components/ui/Icons'
 import { productCategories } from '@/data/products'
+import { siteName, siteUrl, ogImage } from '@/lib/seo'
 
 export default function Products() {
   const [lightboxImage, setLightboxImage] = useState(null)
@@ -18,6 +19,23 @@ export default function Products() {
           name="description"
           content="Browse our selection of premium marble, granite, travertine, and limestone. Direct quarry sourcing with consistent quality for international projects."
         />
+        <link rel="canonical" href={`${siteUrl}/products`} />
+        <meta property="og:title" content="Products | Natural Stone Materials | Marble Professionals" />
+        <meta
+          property="og:description"
+          content="Browse our selection of premium marble, granite, travertine, and limestone. Direct quarry sourcing with consistent quality for international projects."
+        />
+        <meta property="og:url" content={`${siteUrl}/products`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={siteName} />
+        <meta property="og:image" content={ogImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Products | Natural Stone Materials | Marble Professionals" />
+        <meta
+          name="twitter:description"
+          content="Browse our selection of premium marble, granite, travertine, and limestone. Direct quarry sourcing with consistent quality for international projects."
+        />
+        <meta name="twitter:image" content={ogImage} />
       </Head>
 
       {/* Lightbox Modal */}
@@ -134,8 +152,10 @@ export default function Products() {
                           {product.image && !failedImages[product.id] && (
                             <img
                               src={product.image}
-                              alt=""
+                              alt={product.name}
                               className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${loadedImages[product.id] ? 'opacity-100' : 'opacity-0'}`}
+                              loading="lazy"
+                              decoding="async"
                               onLoad={() => setLoadedImages(prev => ({ ...prev, [product.id]: true }))}
                               onError={() => setFailedImages(prev => ({ ...prev, [product.id]: true }))}
                             />

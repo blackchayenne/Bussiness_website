@@ -1,12 +1,30 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { siteName, siteUrl, ogImage } from '@/lib/seo'
 
 export default function Terms() {
   return (
     <>
       <Head>
-        <title>Terms of Service | MarbleSource</title>
-        <meta name="description" content="Terms of service for MarbleSource natural stone export and supply." />
+        <title>Terms of Service | Marble Professionals</title>
+        <meta name="description" content="Terms of service for Marble Professionals natural stone export and supply." />
+        <link rel="canonical" href={`${siteUrl}/terms`} />
+        <meta property="og:title" content="Terms of Service | Marble Professionals" />
+        <meta
+          property="og:description"
+          content="Terms of service for Marble Professionals natural stone export and supply."
+        />
+        <meta property="og:url" content={`${siteUrl}/terms`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={siteName} />
+        <meta property="og:image" content={ogImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Terms of Service | Marble Professionals" />
+        <meta
+          name="twitter:description"
+          content="Terms of service for Marble Professionals natural stone export and supply."
+        />
+        <meta name="twitter:image" content={ogImage} />
       </Head>
 
       <section className="pt-32 pb-20 bg-marble-cream">

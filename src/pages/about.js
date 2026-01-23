@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import SectionHeader from '@/components/ui/SectionHeader'
 import { ArrowRight, Check, Globe, Shield, Users, Scale } from '@/components/ui/Icons'
+import { siteName, siteUrl, ogImage } from '@/lib/seo'
 
 const milestones = [
   {
@@ -75,6 +76,23 @@ export default function About() {
           name="description"
           content="15+ years of international stone trade experience. Learn about our approach to quality, reliability, and client partnerships in natural stone supply."
         />
+        <link rel="canonical" href={`${siteUrl}/about`} />
+        <meta property="og:title" content="About Us | Experience & Values | Marble Professionals" />
+        <meta
+          property="og:description"
+          content="15+ years of international stone trade experience. Learn about our approach to quality, reliability, and client partnerships in natural stone supply."
+        />
+        <meta property="og:url" content={`${siteUrl}/about`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={siteName} />
+        <meta property="og:image" content={ogImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="About Us | Experience & Values | Marble Professionals" />
+        <meta
+          name="twitter:description"
+          content="15+ years of international stone trade experience. Learn about our approach to quality, reliability, and client partnerships in natural stone supply."
+        />
+        <meta name="twitter:image" content={ogImage} />
       </Head>
 
       {/* Hero */}

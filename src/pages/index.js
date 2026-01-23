@@ -5,6 +5,7 @@ import SectionHeader from '@/components/ui/SectionHeader'
 import { ArrowRight, ArrowUpRight, Check, Shield, Globe, Truck, ClipboardCheck } from '@/components/ui/Icons'
 import { productCategories } from '@/data/products'
 import { services } from '@/data/services'
+import { siteName, siteUrl, ogImage } from '@/lib/seo'
 
 const stats = [
   { value: '15+', label: 'Years Experience' },
@@ -51,6 +52,23 @@ export default function Home() {
           content="International natural stone export and supply. Premium marble, granite, travertine, and limestone for large-scale projects. Direct quarry sourcing with rigorous quality control."
         />
         <meta name="keywords" content="marble export, natural stone supplier, granite wholesale, travertine, limestone, building materials" />
+        <link rel="canonical" href={siteUrl} />
+        <meta property="og:title" content="Marble Professionals | Premium Natural Stone Export & Supply" />
+        <meta
+          property="og:description"
+          content="International natural stone export and supply. Premium marble, granite, travertine, and limestone for large-scale projects. Direct quarry sourcing with rigorous quality control."
+        />
+        <meta property="og:url" content={siteUrl} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={siteName} />
+        <meta property="og:image" content={ogImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Marble Professionals | Premium Natural Stone Export & Supply" />
+        <meta
+          name="twitter:description"
+          content="International natural stone export and supply. Premium marble, granite, travertine, and limestone for large-scale projects. Direct quarry sourcing with rigorous quality control."
+        />
+        <meta name="twitter:image" content={ogImage} />
       </Head>
 
       {/* Hero Section */}

@@ -1,12 +1,30 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { siteName, siteUrl, ogImage } from '@/lib/seo'
 
 export default function Privacy() {
   return (
     <>
       <Head>
-        <title>Privacy Policy | MarbleSource</title>
-        <meta name="description" content="Privacy policy for MarbleSource natural stone export and supply." />
+        <title>Privacy Policy | Marble Professionals</title>
+        <meta name="description" content="Privacy policy for Marble Professionals natural stone export and supply." />
+        <link rel="canonical" href={`${siteUrl}/privacy`} />
+        <meta property="og:title" content="Privacy Policy | Marble Professionals" />
+        <meta
+          property="og:description"
+          content="Privacy policy for Marble Professionals natural stone export and supply."
+        />
+        <meta property="og:url" content={`${siteUrl}/privacy`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content={siteName} />
+        <meta property="og:image" content={ogImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Privacy Policy | Marble Professionals" />
+        <meta
+          name="twitter:description"
+          content="Privacy policy for Marble Professionals natural stone export and supply."
+        />
+        <meta name="twitter:image" content={ogImage} />
       </Head>
 
       <section className="pt-32 pb-20 bg-marble-cream">
