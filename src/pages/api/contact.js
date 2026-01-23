@@ -30,7 +30,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: 'Missing required fields' })
     }
 
-    const fromEmail = process.env.RESEND_FROM_EMAIL || 'Marble Professionals <onboarding@resend.dev>'
+    const fromEmail =
+      process.env.RESEND_FROM_EMAIL ||
+      process.env.RESEND_EMAIL ||
+      'Marble Professionals <onboarding@resend.dev>'
     const safeMessage = String(message).replace(/\r?\n/g, '<br/>')
 
     await resend.emails.send({
