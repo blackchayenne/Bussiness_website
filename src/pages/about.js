@@ -156,7 +156,7 @@ export default function About() {
                   consistency, and delivering on time.
                 </p>
                 <p>
-                  Our clients are professionals—contractors, developers, importers—who have been
+                  Our clients are professionals - contractors, developers, importers - who have been
                   burned by suppliers who over-promise and under-deliver. They come to us because
                   they need reliability, not sales pitches.
                 </p>
@@ -168,7 +168,7 @@ export default function About() {
 
               <div className="mt-10 p-6 bg-stone-50 border-l-4 border-stone-900">
                 <p className="text-stone-700 italic">
-                  "We treat every shipment like our reputation depends on it—because it does."
+                  "We treat every shipment like our reputation depends on it - because it does."
                 </p>
               </div>
             </div>

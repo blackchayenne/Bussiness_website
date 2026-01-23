@@ -167,7 +167,7 @@ export default function Contact() {
             </h1>
             <p className="mt-6 text-lg text-stone-600 leading-relaxed">
               Tell us about your requirements and we'll get back to you with relevant information.
-              No sales pressure—just straightforward answers to your questions.
+              No sales pressure - just straightforward answers to your questions.
             </p>
           </div>
         </div>
@@ -248,10 +248,10 @@ export default function Contact() {
                   What to Include
                 </h3>
                 <ul className="text-sm text-stone-600 space-y-2">
-                  <li>• Material type and specifications</li>
-                  <li>• Estimated quantities</li>
-                  <li>• Delivery location</li>
-                  <li>• Project timeline</li>
+                  <li>- Material type and specifications</li>
+                  <li>- Estimated quantities</li>
+                  <li>- Delivery location</li>
+                  <li>- Project timeline</li>
                 </ul>
               </div>
             </div>

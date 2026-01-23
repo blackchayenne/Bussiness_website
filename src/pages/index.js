@@ -173,7 +173,7 @@ export default function Home() {
               </div>
               {/* Caption */}
               <p className="mt-4 text-sm text-stone-500">
-                International logistics — Reliable delivery to ports worldwide
+                International logistics - Reliable delivery to ports worldwide
               </p>
             </div>
           </div>
@@ -356,7 +356,7 @@ export default function Home() {
           </h2>
           <p className="mt-6 text-lg text-stone-600 max-w-2xl mx-auto">
             Tell us about your requirements and we'll provide a detailed quotation.
-            No obligations, no pressure—just straightforward information.
+            No obligations, no pressure - just straightforward information.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
             <Link href="/contact" className="btn-primary">

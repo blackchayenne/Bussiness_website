@@ -94,7 +94,7 @@ export default function Terms() {
 
           <div className="mt-12 pt-8 border-t border-stone-200">
             <Link href="/" className="text-stone-600 hover:text-stone-900 transition-colors">
-              ← Back to Home
+              <- Back to Home
             </Link>
           </div>
         </div>

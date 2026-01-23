@@ -48,7 +48,7 @@ export default function Services() {
               Our Services
             </p>
             <h1 className="font-display text-display-sm md:text-display text-stone-900">
-              Beyond supply—full project support
+              Beyond supply - full project support
             </h1>
             <p className="mt-6 text-lg text-stone-600 leading-relaxed">
               We understand that stone supply is just one part of your project. That's why we offer
@@ -165,7 +165,7 @@ export default function Services() {
               All services work together
             </h2>
             <p className="mt-6 text-lg text-stone-300 leading-relaxed">
-              Our services aren't isolated offerings—they're integrated to support your project
+              Our services aren't isolated offerings - they're integrated to support your project
               from initial inquiry through final delivery. You get a single point of contact
               who coordinates everything.
             </p>
