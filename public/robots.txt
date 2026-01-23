@@ -1,0 +1,10 @@
+# Robots.txt for MarbleSource
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://yourdomain.com/sitemap.xml
+
+# Disallow admin/api routes
+Disallow: /api/

@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-marble-white text-stone-800 font-sans;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-display text-stone-900;
+  }
+
+  ::selection {
+    @apply bg-stone-200 text-stone-900;
+  }
+}
+
+@layer components {
+  .container-wide {
+    @apply max-w-8xl mx-auto px-6 sm:px-8 lg:px-12;
+  }
+
+  .container-narrow {
+    @apply max-w-4xl mx-auto px-6 sm:px-8;
+  }
+
+  .section-padding {
+    @apply py-20 md:py-28 lg:py-32;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-4 text-sm font-medium tracking-wide uppercase bg-stone-900 text-white hover:bg-stone-800 transition-colors duration-200;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-8 py-4 text-sm font-medium tracking-wide uppercase border border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white transition-colors duration-200;
+  }
+
+  .btn-text {
+    @apply inline-flex items-center text-sm font-medium tracking-wide uppercase text-stone-700 hover:text-stone-900 transition-colors duration-200;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-4 bg-white border border-stone-200 text-stone-800 placeholder-stone-400 focus:outline-none focus:border-stone-400 transition-colors duration-200;
+  }
+
+  .label-text {
+    @apply block text-xs font-medium tracking-wider uppercase text-stone-500 mb-2;
+  }
+
+  .card {
+    @apply bg-white border border-stone-100 p-8 hover:border-stone-200 transition-colors duration-300;
+  }
+
+  .divider {
+    @apply w-16 h-px bg-stone-300;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Prose styles for legal/text pages */
+  .prose h2 {
+    @apply text-xl font-display font-medium text-stone-900 mt-10 mb-4;
+  }
+
+  .prose p {
+    @apply text-stone-600 leading-relaxed mb-4;
+  }
+
+  .prose ul {
+    @apply list-disc list-inside space-y-2 mb-6 text-stone-600;
+  }
+
+  .prose a {
+    @apply text-stone-900 underline hover:no-underline;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-stone-900 to-stone-600;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  .animate-slide-in {
+    animation: slideIn 0.5s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
