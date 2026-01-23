@@ -11,6 +11,7 @@ export default function Products() {
   const [lightboxImage, setLightboxImage] = useState(null)
   const [loadedImages, setLoadedImages] = useState({})
   const [failedImages, setFailedImages] = useState({})
+  const getOptimizedSrc = (src) => (src ? `/images/optimized${src.replace('/images', '')}` : src)
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -90,13 +91,17 @@ export default function Products() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-          <img
-            src={lightboxImage.src}
-            alt={lightboxImage.name}
-            className="max-w-full max-h-[85vh] object-contain shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-            onError={() => setLightboxImage(null)}
-          />
+          <div className="relative w-full max-w-5xl h-[85vh]">
+            <Image
+              src={lightboxImage.src}
+              alt={lightboxImage.name}
+              fill
+              sizes="100vw"
+              className="object-contain shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+              onError={() => setLightboxImage(null)}
+            />
+          </div>
           <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white text-lg font-medium bg-black/50 px-4 py-2 rounded">
             {lightboxImage.name}
           </p>
@@ -137,7 +142,7 @@ export default function Products() {
             <div className="relative">
               <div className="aspect-[4/3] bg-stone-100 overflow-hidden">
                 <Image
-                  src="/images/quarry.jpeg"
+                  src="/images/optimized/quarry.jpeg"
                   alt="Marble quarry with stone blocks"
                   fill
                   className="object-cover"
@@ -203,13 +208,13 @@ export default function Products() {
 
                           {/* Actual image - hidden until loaded */}
                           {product.image && !failedImages[product.id] && (
-                            <img
-                              src={product.image}
+                            <Image
+                              src={getOptimizedSrc(product.image)}
                               alt={product.name}
-                              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${loadedImages[product.id] ? 'opacity-100' : 'opacity-0'}`}
-                              loading="lazy"
-                              decoding="async"
-                              onLoad={() => setLoadedImages(prev => ({ ...prev, [product.id]: true }))}
+                              fill
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                              className={`object-cover transition-opacity duration-300 ${loadedImages[product.id] ? 'opacity-100' : 'opacity-0'}`}
+                              onLoadingComplete={() => setLoadedImages(prev => ({ ...prev, [product.id]: true }))}
                               onError={() => setFailedImages(prev => ({ ...prev, [product.id]: true }))}
                             />
                           )}
