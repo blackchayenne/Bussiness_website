@@ -24,10 +24,9 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: 'Missing required fields' })
     }
 
-    // 1️⃣ Sana (sales) mail
     await resend.emails.send({
-      from: 'Website <onboarding@resend.dev>',
-      to: [process.env.SALES_EMAIL],
+      from: 'Marble Professionals <onboarding@resend.dev>',
+      to: [process.env.SALES_EMAIL, email], // 👈 KRİTİK
       subject: `New Inquiry – ${company} (${country})`,
       html: `
         <h2>New Inquiry</h2>
@@ -43,21 +42,9 @@ export default async function handler(req, res) {
       `,
     })
 
-    // 2️⃣ Müşteriye confirmation mail
-    await resend.emails.send({
-      from: 'Marble Professionals <onboarding@resend.dev>',
-      to: [email],
-      subject: 'We received your inquiry',
-      html: `
-        <p>Dear ${name},</p>
-        <p>Thank you for contacting us. We received your inquiry and will get back to you within 24 hours.</p>
-        <p>Best regards,<br/>Marble Professionals</p>
-      `,
-    })
-
     return res.status(200).json({ success: true })
   } catch (error) {
     console.error(error)
-    return res.status(500).json({ message: 'Email sending failed' })
+    return res.status(500).json({ message: 'Internal server error' })
   }
 }
