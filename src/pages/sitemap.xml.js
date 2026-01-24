@@ -5,6 +5,7 @@ const staticPages = [
   '/products',
   '/services',
   '/about',
+  '/instagram',
   '/contact',
   '/privacy',
   '/terms',
