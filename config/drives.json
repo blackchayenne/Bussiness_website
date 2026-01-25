@@ -1,0 +1,29 @@
+{
+  "drives": [
+    {
+      "id": "afyon",
+      "name": "Afyon Warehouse",
+      "url": "https://drive.google.com/drive/folders/1kz9n74MrnWEMGHSRVvYP0DbUfBhmlKxE",
+      "enabled": true,
+      "folderId": "1kz9n74MrnWEMGHSRVvYP0DbUfBhmlKxE"
+    },
+    {
+      "id": "denizli",
+      "name": "Denizli Warehouse",
+      "url": "https://drive.google.com/drive/folders/1tkKRkZjXYlxjVSRpAcuD2DN9QEqg6jsI",
+      "enabled": true,
+      "folderId": "1tkKRkZjXYlxjVSRpAcuD2DN9QEqg6jsI"
+    },
+    {
+      "id": "denizli-2",
+      "name": "Denizli Warehouse 2",
+      "url": "https://drive.google.com/drive/folders/1eNshOhTpmrPwZag_hY48KYCy27htGkZr",
+      "enabled": true,
+      "folderId": "1eNshOhTpmrPwZag_hY48KYCy27htGkZr"
+    }
+  ],
+  "settings": {
+    "autoSync": true,
+    "syncIntervalMinutes": 1440
+  }
+}

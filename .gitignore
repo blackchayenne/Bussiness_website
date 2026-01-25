@@ -43,6 +43,10 @@ coverage/
 # Misc
 *.log
 
+# Cache and logs directories
+.cache/
+.logs/
+
 nul
 NUL
 **/nul

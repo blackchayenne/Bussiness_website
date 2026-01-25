@@ -64,8 +64,11 @@ export default function Header() {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-6">
-            <Link href="/contact" className="btn-primary">
-              Request Quote
+            <Link
+              href="/warehouse"
+              className="inline-flex items-center justify-center px-7 py-3.5 text-sm font-medium tracking-wide uppercase bg-accent-gold text-white hover:bg-accent-copper transition-colors duration-200"
+            >
+              E-Warehouse
             </Link>
           </div>
 
@@ -123,7 +126,7 @@ export default function Header() {
               </Link>
             ))}
             <Link
-              href="/contact"
+              href="/warehouse"
               className="btn-primary mt-8"
               style={{
                 transitionDelay: isOpen ? '250ms' : '0ms',
@@ -131,7 +134,7 @@ export default function Header() {
                 opacity: isOpen ? 1 : 0
               }}
             >
-              Request Quote
+              E-Warehouse
             </Link>
           </nav>
         </div>

@@ -42,6 +42,25 @@ const clientTypes = [
   'Government Projects',
 ]
 
+const categoryThumbnails = {
+  marble: {
+    src: '/images/optimized/white-marble/Calacatta_White.jpg',
+    alt: 'Calacatta White marble slab',
+  },
+  granite: {
+    src: '/images/optimized/granite/Aksaray_Yaylak.jpg',
+    alt: 'Aksaray Yaylak granite slab',
+  },
+  travertine: {
+    src: '/images/optimized/Travertine/Classic.jpg',
+    alt: 'Classic travertine slabs',
+  },
+  limestone: {
+    src: '/images/optimized/Limestone/La%20Perla.jpg',
+    alt: 'La Perla limestone slabs',
+  },
+}
+
 export default function Home() {
   return (
     <>
@@ -230,6 +249,15 @@ export default function Home() {
                 className="group"
               >
                 <div className="aspect-[3/4] bg-gradient-to-br from-stone-100 to-stone-200 relative overflow-hidden">
+                  {categoryThumbnails[category.id] && (
+                    <Image
+                      src={categoryThumbnails[category.id].src}
+                      alt={categoryThumbnails[category.id].alt}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                    />
+                  )}
                   {/* Visual texture for stone */}
                   <div className="absolute inset-0 bg-gradient-to-br from-stone-200 via-marble-warm to-stone-100 opacity-80" />
                   <div
