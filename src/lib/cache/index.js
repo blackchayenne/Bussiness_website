@@ -3,7 +3,10 @@ let cacheInstance = null
 export function getCache() {
   if (cacheInstance) return cacheInstance
 
-  const provider = process.env.CACHE_PROVIDER || 'file'
+  // Vercel has read-only filesystem, so default to memory there
+  const isVercel = process.env.VERCEL === '1'
+  const defaultProvider = isVercel ? 'memory' : 'file'
+  const provider = process.env.CACHE_PROVIDER || defaultProvider
 
   switch (provider) {
     case 'redis': {
