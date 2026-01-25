@@ -3,10 +3,21 @@ let cacheInstance = null
 export function getCache() {
   if (cacheInstance) return cacheInstance
 
-  // Vercel has read-only filesystem, so default to memory there
+  // Check if Redis is configured (preferred for production)
+  const hasRedis = !!(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN)
   const isVercel = process.env.VERCEL === '1'
-  const defaultProvider = isVercel ? 'memory' : 'file'
-  const provider = process.env.CACHE_PROVIDER || defaultProvider
+
+  // Priority: explicit CACHE_PROVIDER > Redis if configured > memory on Vercel > file locally
+  let provider = process.env.CACHE_PROVIDER
+  if (!provider) {
+    if (hasRedis) {
+      provider = 'redis'
+    } else if (isVercel) {
+      provider = 'memory'
+    } else {
+      provider = 'file'
+    }
+  }
 
   switch (provider) {
     case 'redis': {
