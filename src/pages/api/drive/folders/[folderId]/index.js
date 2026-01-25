@@ -3,6 +3,7 @@ import { isMockMode } from '@/lib/drive/client'
 import { getMockFolder } from '@/lib/mock/data'
 import { buildThumbnailUrl } from '@/lib/drive/parser'
 import { isValidFolderId } from '@/lib/utils/validators'
+import { DriveCrawler } from '@/lib/drive/crawler'
 
 function findCoverImageInSubtree(index, startFolderId) {
   const stack = [startFolderId]
@@ -52,9 +53,13 @@ export default async function handler(req, res) {
     }
 
     const cache = getCache()
-    const index = await cache.get(`index:${rootId}`)
+    let index = await cache.get(`index:${rootId}`)
+
+    // Auto-load index if not in cache (handles serverless cold starts)
     if (!index) {
-      return res.status(404).json({ error: 'Index not found. Please load the folder tree first.' })
+      const crawler = new DriveCrawler()
+      index = await crawler.crawl(rootId)
+      await cache.set(`index:${rootId}`, index)
     }
 
     const folder = index.folders[folderId]

@@ -3,6 +3,7 @@ import { isMockMode } from '@/lib/drive/client'
 import { getMockFolderImages } from '@/lib/mock/data'
 import { checkRateLimit, getClientId, RATE_LIMITS } from '@/lib/utils/rate-limit'
 import { isValidFolderId, isValidPage, isValidPageSize } from '@/lib/utils/validators'
+import { DriveCrawler } from '@/lib/drive/crawler'
 
 function sortImages(images, sortBy, sortOrder) {
   const sorted = [...images]
@@ -86,9 +87,13 @@ export default async function handler(req, res) {
     }
 
     const cache = getCache()
-    const index = await cache.get(`index:${rootId}`)
+    let index = await cache.get(`index:${rootId}`)
+
+    // Auto-load index if not in cache (handles serverless cold starts)
     if (!index) {
-      return res.status(404).json({ error: 'Index not found. Please load the folder tree first.' })
+      const crawler = new DriveCrawler()
+      index = await crawler.crawl(rootId)
+      await cache.set(`index:${rootId}`, index)
     }
 
     const fileIds = index.folderFiles[folderId] || []
