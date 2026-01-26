@@ -114,8 +114,12 @@ export default function About() {
             </div>
 
             <div className="relative">
-              <div className="aspect-[4/3] bg-gradient-to-br from-stone-100 to-stone-200 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-stone-200 via-marble-warm to-stone-100 opacity-80" />
+              <div className="aspect-[4/3] overflow-hidden rounded-sm border border-stone-200 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
+                <img
+                  src="/images/stairs.jpg"
+                  alt="Stone stairs"
+                  className="h-full w-full object-cover"
+                />
               </div>
             </div>
           </div>

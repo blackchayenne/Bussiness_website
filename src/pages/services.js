@@ -85,18 +85,29 @@ export default function Services() {
       {/* Hero */}
       <section className="pt-32 pb-20 bg-gradient-to-b from-marble-cream to-white">
         <div className="container-wide">
-          <div className="max-w-3xl">
-            <p className="text-sm font-medium tracking-widest uppercase text-stone-500 mb-4">
-              Our Services
-            </p>
-            <h1 className="font-display text-display-sm md:text-display text-stone-900">
-              Beyond supply - full project support
-            </h1>
-            <p className="mt-6 text-lg text-stone-600 leading-relaxed">
-              We understand that stone supply is just one part of your project. That's why we offer
-              comprehensive services to ensure quality, manage timelines, and handle the
-              complexities of international logistics.
-            </p>
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-center">
+            <div className="max-w-3xl">
+              <p className="text-sm font-medium tracking-widest uppercase text-stone-500 mb-4">
+                Our Services
+              </p>
+              <h1 className="font-display text-display-sm md:text-display text-stone-900">
+                Beyond supply - full project support
+              </h1>
+              <p className="mt-6 text-lg text-stone-600 leading-relaxed">
+                We understand that stone supply is just one part of your project. That's why we offer
+                comprehensive services to ensure quality, manage timelines, and handle the
+                complexities of international logistics.
+              </p>
+            </div>
+            <div className="lg:justify-self-end">
+              <div className="aspect-[4/5] w-full max-w-[360px] overflow-hidden rounded-sm border border-stone-200 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
+                <img
+                  src="/images/blue_ageta.jpg"
+                  alt="Blue Ageta marble"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Quick Nav */}
