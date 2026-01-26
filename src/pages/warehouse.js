@@ -298,6 +298,10 @@ export default function WarehousePage() {
               <h1 className="mt-3 font-display text-display-sm text-stone-900">
                 E-Warehouse
               </h1>
+              <p className="mt-3 max-w-xl text-sm text-stone-600">
+                E-Warehouse is your live inventory lounge. Browse, pick, and message
+                us to lock it in.
+              </p>
             </div>
             {isMock && (
               <span className="px-3 py-1 text-xs bg-amber-100 text-amber-700 rounded-full">
