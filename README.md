@@ -178,7 +178,34 @@ The contact form at `/api/contact` is a placeholder. To make it functional:
    ```
    RESEND_API_KEY=your_api_key
    SALES_EMAIL=sales@yourdomain.com
+   NEXT_PUBLIC_SITE_URL=https://yourdomain.com
+   NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+   NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=your_search_console_verification_code
    ```
+
+## Analytics and SEO Tracking
+
+### Google Analytics 4 (GA4)
+
+1. Create a GA4 property and Web Data Stream for your domain
+2. Copy your Measurement ID (format: `G-XXXXXXXXXX`)
+3. Set `NEXT_PUBLIC_GA_ID` in Vercel Project Settings -> Environment Variables
+4. Redeploy the project
+5. Verify traffic in GA4 Realtime report
+
+### Google Search Console
+
+1. Add your domain property in Google Search Console
+2. Use HTML tag verification and copy only the `content` value
+3. Set `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` in Vercel environment variables
+4. Redeploy, then click Verify in Search Console
+5. Submit `https://yourdomain.com/sitemap.xml` in Search Console
+
+### Ranking and visibility checks
+
+- Index status: Search Console -> Pages
+- Search queries and average positions: Search Console -> Performance
+- If a page is indexed, `site:yourdomain.com` should return it in Google results
 
 ## Adding Images
 
