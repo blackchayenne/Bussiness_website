@@ -6,6 +6,12 @@ import { logError, logInfo } from '@/lib/utils/logger'
 import { isValidFolderId, isValidSyncSecret } from '@/lib/utils/validators'
 
 export default async function handler(req, res) {
+  const resolveWarehouseName = async (folderId) => {
+    const enabledDrives = await getEnabledDrives()
+    const match = enabledDrives.find((d) => d.folderId === folderId)
+    return match?.name || null
+  }
+
   if (req.method === 'POST') {
     try {
       const { secret, folderId, fullSync } = req.body || {}
@@ -44,7 +50,8 @@ export default async function handler(req, res) {
         })
       }
 
-      const result = await syncManager.incrementalSync(folderId)
+      const warehouseName = await resolveWarehouseName(folderId)
+      const result = await syncManager.incrementalSync(folderId, { warehouseName })
 
       if (!result.success) {
         await logError('Incremental sync failed', { folderId, error: result.error })
@@ -118,7 +125,9 @@ export default async function handler(req, res) {
         const drive = enabledDrives.find((d) => d.folderId === folderId)
 
         try {
-          const result = await syncManager.incrementalSync(folderId)
+          const result = await syncManager.incrementalSync(folderId, {
+            warehouseName: drive?.name,
+          })
           await logInfo('Sync all folder completed', {
             folderId,
             name: drive?.name,

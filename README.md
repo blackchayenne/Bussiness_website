@@ -207,6 +207,64 @@ The contact form at `/api/contact` is a placeholder. To make it functional:
 - Search queries and average positions: Search Console -> Performance
 - If a page is indexed, `site:yourdomain.com` should return it in Google results
 
+## Warehouse Change Log (Google Sheets)
+
+Track added/removed folders and images in one sheet with one row per change.
+
+### 1) Create a Google Sheet
+
+Create header row:
+
+`TarihSaat | Depo | Islem | Tur | Ad | Yol | RootFolderId`
+
+### 2) Add Apps Script webhook
+
+Open `Extensions -> Apps Script` and paste:
+
+```javascript
+const SHEET_NAME = 'Sheet1';
+const SECRET = 'replace_with_same_secret_in_vercel';
+
+function doPost(e) {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+  const body = JSON.parse(e.postData.contents || '{}');
+
+  if (!sheet) {
+    return ContentService.createTextOutput('Sheet not found').setMimeType(ContentService.MimeType.TEXT);
+  }
+
+  if (SECRET && body.secret !== SECRET) {
+    return ContentService.createTextOutput('Unauthorized').setMimeType(ContentService.MimeType.TEXT);
+  }
+
+  const events = Array.isArray(body.events) ? body.events : [];
+  for (const ev of events) {
+    sheet.appendRow([
+      ev.timestamp || new Date().toISOString(),
+      ev.warehouse || '',
+      ev.action || '',
+      ev.itemType || '',
+      ev.name || '',
+      ev.path || '',
+      ev.rootFolderId || '',
+    ]);
+  }
+
+  return ContentService.createTextOutput(
+    JSON.stringify({ success: true, appended: events.length })
+  ).setMimeType(ContentService.MimeType.JSON);
+}
+```
+
+Deploy as Web App (`Anyone with the link`) and copy URL.
+
+### 3) Add Vercel environment variables
+
+- `REPORT_WEBHOOK_URL` = Apps Script Web App URL
+- `REPORT_WEBHOOK_SECRET` = same value as `SECRET` in Apps Script
+
+After redeploy, each sync writes new rows to the same sheet.
+
 ## Adding Images
 
 Replace placeholder gradients with actual images:

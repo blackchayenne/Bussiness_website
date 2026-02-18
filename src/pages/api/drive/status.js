@@ -2,6 +2,7 @@ import { getCache } from '@/lib/cache'
 import { isMockMode } from '@/lib/drive/client'
 import { getMockSyncStatus, getMockIndex } from '@/lib/mock/data'
 import { SyncManager } from '@/lib/drive/sync'
+import { getEnabledDrives } from '@/lib/config/manager'
 import { logError, logInfo } from '@/lib/utils/logger'
 import { isValidFolderId } from '@/lib/utils/validators'
 
@@ -47,7 +48,11 @@ export default async function handler(req, res) {
       const needsSync = await syncManager.checkSyncNeeded(folderId, AUTO_SYNC_MAX_AGE_MS)
 
       if (needsSync) {
-        const result = await syncManager.incrementalSync(folderId)
+        const enabledDrives = await getEnabledDrives()
+        const drive = enabledDrives.find((d) => d.folderId === folderId)
+        const result = await syncManager.incrementalSync(folderId, {
+          warehouseName: drive?.name,
+        })
         if (!result.success) {
           syncError = result.error || 'Sync failed'
           await logError('Auto sync failed', { folderId, error: result.error })

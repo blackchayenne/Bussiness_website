@@ -3,6 +3,7 @@ import { DriveCrawler } from './crawler'
 import { IMAGE_MIME_TYPES } from './types'
 import { buildThumbnailUrl, buildViewUrl } from './parser'
 import { getCache } from '../cache'
+import { reportSyncChanges } from '../reporting/change-reporter'
 
 export class SyncManager {
   constructor(client) {
@@ -17,7 +18,7 @@ export class SyncManager {
     return index
   }
 
-  async incrementalSync(rootFolderId) {
+  async incrementalSync(rootFolderId, options = {}) {
     const cache = getCache()
     const index = await cache.get(`index:${rootFolderId}`)
 
@@ -76,6 +77,11 @@ export class SyncManager {
       }
       index.lastSyncTime = new Date().toISOString()
       await cache.set(`index:${rootFolderId}`, index)
+      const reportResult = await reportSyncChanges({
+        warehouseName: options.warehouseName,
+        rootFolderId,
+        events: result.events,
+      })
 
       return {
         success: true,
@@ -83,6 +89,7 @@ export class SyncManager {
         foldersUpdated: result.foldersUpdated,
         filesAdded: result.filesAdded,
         filesRemoved: result.filesRemoved,
+        report: reportResult,
         newStartPageToken: newStartPageToken || nextPageToken,
       }
     } catch (error) {
@@ -103,6 +110,7 @@ export class SyncManager {
     let foldersUpdated = 0
     let filesAdded = 0
     let filesRemoved = 0
+    const events = []
 
     const foldersToUpdate = new Set()
 
@@ -111,13 +119,32 @@ export class SyncManager {
 
       if (removed) {
         if (index.files[fileId]) {
-          const deletedFolderId = this.removeFileFromIndex(index, fileId)
+          const removedFile = this.removeFileFromIndex(index, fileId)
+          const deletedFolderId = removedFile?.folderId || null
           if (deletedFolderId) {
             foldersToUpdate.add(deletedFolderId)
           }
+          if (removedFile) {
+            const folderPath = index.folders[removedFile.folderId]?.path || ''
+            events.push({
+              timestamp: new Date().toISOString(),
+              action: 'Cikarildi',
+              itemType: 'Dosya',
+              name: removedFile.name,
+              path: folderPath ? `${folderPath}/${removedFile.name}` : removedFile.name,
+            })
+          }
           filesRemoved++
         } else if (index.folders[fileId]) {
-          const parentId = index.folders[fileId]?.parentId || null
+          const removedFolder = index.folders[fileId]
+          const parentId = removedFolder?.parentId || null
+          events.push({
+            timestamp: new Date().toISOString(),
+            action: 'Cikarildi',
+            itemType: 'Klasor',
+            name: removedFolder?.name || fileId,
+            path: removedFolder?.path || '',
+          })
           this.removeFolderFromIndex(index, fileId)
           if (parentId) {
             foldersToUpdate.add(parentId)
@@ -170,6 +197,13 @@ export class SyncManager {
             if (!index.folders[parentId].children.includes(file.id)) {
               index.folders[parentId].children.push(file.id)
             }
+            events.push({
+              timestamp: new Date().toISOString(),
+              action: 'Eklendi',
+              itemType: 'Klasor',
+              name: folder.name,
+              path: folder.path,
+            })
             foldersUpdated++
             filesAdded += images.length
             foldersToUpdate.add(parentId)
@@ -216,18 +250,34 @@ export class SyncManager {
       const isImage = IMAGE_MIME_TYPES.includes(file.mimeType)
 
       if (!isImage) {
-        const removedFolderId = this.removeFileFromIndex(index, fileId)
-        if (removedFolderId) {
-          foldersToUpdate.add(removedFolderId)
+        const removedFile = this.removeFileFromIndex(index, fileId)
+        if (removedFile?.folderId) {
+          foldersToUpdate.add(removedFile.folderId)
+          const folderPath = index.folders[removedFile.folderId]?.path || ''
+          events.push({
+            timestamp: new Date().toISOString(),
+            action: 'Cikarildi',
+            itemType: 'Dosya',
+            name: removedFile.name,
+            path: folderPath ? `${folderPath}/${removedFile.name}` : removedFile.name,
+          })
           filesRemoved++
         }
         continue
       }
 
       if (!parentId || !index.folders[parentId]) {
-        const removedFolderId = this.removeFileFromIndex(index, fileId)
-        if (removedFolderId) {
-          foldersToUpdate.add(removedFolderId)
+        const removedFile = this.removeFileFromIndex(index, fileId)
+        if (removedFile?.folderId) {
+          foldersToUpdate.add(removedFile.folderId)
+          const folderPath = index.folders[removedFile.folderId]?.path || ''
+          events.push({
+            timestamp: new Date().toISOString(),
+            action: 'Cikarildi',
+            itemType: 'Dosya',
+            name: removedFile.name,
+            path: folderPath ? `${folderPath}/${removedFile.name}` : removedFile.name,
+          })
           filesRemoved++
         }
         continue
@@ -272,6 +322,14 @@ export class SyncManager {
         if (!index.folderFiles[parentId].includes(file.id)) {
           index.folderFiles[parentId].push(file.id)
         }
+        const folderPath = index.folders[parentId]?.path || ''
+        events.push({
+          timestamp: new Date().toISOString(),
+          action: 'Eklendi',
+          itemType: 'Dosya',
+          name: driveImage.name,
+          path: folderPath ? `${folderPath}/${driveImage.name}` : driveImage.name,
+        })
         filesAdded++
       }
       foldersToUpdate.add(parentId)
@@ -282,7 +340,7 @@ export class SyncManager {
       foldersUpdated++
     }
 
-    return { foldersUpdated, filesAdded, filesRemoved }
+    return { foldersUpdated, filesAdded, filesRemoved, events }
   }
 
   removeFolderFromIndex(index, folderId) {
@@ -346,7 +404,7 @@ export class SyncManager {
       ].filter((id) => id !== fileId)
     }
 
-    return existing.folderId
+    return existing
   }
 
   updateFolderPath(index, folderId, parentPath) {

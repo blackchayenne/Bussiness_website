@@ -41,7 +41,9 @@ export default async function handler(req, res) {
       if (!drive.folderId) continue
 
       try {
-        const result = await syncManager.incrementalSync(drive.folderId)
+        const result = await syncManager.incrementalSync(drive.folderId, {
+          warehouseName: drive.name,
+        })
         await logInfo('Cron sync completed', {
           driveId: drive.id,
           driveName: drive.name,
