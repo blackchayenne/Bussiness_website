@@ -3,6 +3,8 @@ import { getCache } from '@/lib/cache'
 import { createDriveClient, isMockMode } from '@/lib/drive/client'
 import { getMockIndex, buildMockFolderTree } from '@/lib/mock/data'
 import { buildThumbnailUrl } from '@/lib/drive/parser'
+import { reportSyncChanges } from '@/lib/reporting/change-reporter'
+import { getEnabledDrives } from '@/lib/config/manager'
 import { logError, logInfo } from '@/lib/utils/logger'
 import { checkRateLimit, getRateLimitHeaders, getClientId, RATE_LIMITS } from '@/lib/utils/rate-limit'
 import { isValidFolderId } from '@/lib/utils/validators'
@@ -248,6 +250,26 @@ export default async function handler(req, res) {
       if (indexModified) {
         index.lastSyncTime = new Date().toISOString()
         await cache.set(`index:${folderId}`, index)
+
+        try {
+          const enabledDrives = await getEnabledDrives()
+          const drive = enabledDrives.find((d) => d.folderId === folderId)
+          await reportSyncChanges({
+            warehouseName: drive?.name,
+            rootFolderId: folderId,
+            events: [],
+            summary: {
+              totalFiles: Object.keys(index.files || {}).length,
+              totalFolders: Object.keys(index.folders || {}).length,
+              updatedAt: index.lastSyncTime,
+            },
+          })
+        } catch (reportError) {
+          await logError('Tree summary report failed', {
+            folderId,
+            message: reportError instanceof Error ? reportError.message : 'Unknown error',
+          })
+        }
       }
 
       const tree = buildFolderTree(index)
