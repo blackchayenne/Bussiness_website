@@ -18,14 +18,26 @@ function normalizeEvents(events, warehouseName, rootFolderId) {
   }))
 }
 
-export async function reportSyncChanges({ warehouseName, rootFolderId, events }) {
-  if (!hasReporterConfig() || !Array.isArray(events) || events.length === 0) {
+export async function reportSyncChanges({ warehouseName, rootFolderId, events, summary }) {
+  const hasEvents = Array.isArray(events) && events.length > 0
+  const hasSummary = !!summary
+
+  if (!hasReporterConfig() || (!hasEvents && !hasSummary)) {
     return { sent: false, reason: 'disabled_or_empty' }
   }
 
   const payload = {
     secret: REPORT_WEBHOOK_SECRET || null,
-    events: normalizeEvents(events, warehouseName, rootFolderId),
+    events: hasEvents ? normalizeEvents(events, warehouseName, rootFolderId) : [],
+    summary: hasSummary
+      ? {
+          warehouse: warehouseName || rootFolderId,
+          rootFolderId,
+          totalFiles: Number(summary.totalFiles || 0),
+          totalFolders: Number(summary.totalFolders || 0),
+          updatedAt: summary.updatedAt || new Date().toISOString(),
+        }
+      : null,
   }
 
   try {

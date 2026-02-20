@@ -57,6 +57,16 @@ export class SyncManager {
         }
         index.lastSyncTime = new Date().toISOString()
         await cache.set(`index:${rootFolderId}`, index)
+        const reportResult = await reportSyncChanges({
+          warehouseName: options.warehouseName,
+          rootFolderId,
+          events: [],
+          summary: {
+            totalFiles: Object.keys(index.files || {}).length,
+            totalFolders: Object.keys(index.folders || {}).length,
+            updatedAt: index.lastSyncTime,
+          },
+        })
 
         return {
           success: true,
@@ -64,6 +74,7 @@ export class SyncManager {
           foldersUpdated: 0,
           filesAdded: 0,
           filesRemoved: 0,
+          report: reportResult,
           newStartPageToken: updatedToken,
         }
       }
@@ -81,6 +92,11 @@ export class SyncManager {
         warehouseName: options.warehouseName,
         rootFolderId,
         events: result.events,
+        summary: {
+          totalFiles: Object.keys(index.files || {}).length,
+          totalFolders: Object.keys(index.folders || {}).length,
+          updatedAt: index.lastSyncTime,
+        },
       })
 
       return {

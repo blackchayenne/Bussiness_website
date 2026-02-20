@@ -225,6 +225,9 @@ Open `Extensions -> Apps Script` and paste:
 const SHEET_NAME = 'Sheet1';
 const SECRET = 'replace_with_same_secret_in_vercel';
 
+const SUMMARY_HEADERS = ['Depo Ozeti', 'Toplam Dosya', 'Toplam Klasor', 'Son Guncelleme'];
+const SUMMARY_START_COL = 9; // I sütunu
+
 function doPost(e) {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
   const body = JSON.parse(e.postData.contents || '{}');
@@ -250,9 +253,36 @@ function doPost(e) {
     ]);
   }
 
+  writeSummary(sheet, body.summary);
+
   return ContentService.createTextOutput(
     JSON.stringify({ success: true, appended: events.length })
   ).setMimeType(ContentService.MimeType.JSON);
+}
+
+function writeSummary(sheet, summary) {
+  if (!summary || !summary.warehouse) return;
+
+  // Ensure summary header exists
+  const headerRow = sheet.getRange(1, SUMMARY_START_COL, 1, SUMMARY_HEADERS.length).getValues()[0];
+  if (!headerRow[0]) {
+    sheet.getRange(1, SUMMARY_START_COL, 1, SUMMARY_HEADERS.length).setValues([SUMMARY_HEADERS]);
+  }
+
+  // Keep summary panel fixed on the right side (I2 and below)
+  const summaryRows = sheet.getRange(2, SUMMARY_START_COL, 100, 1).getValues().flat();
+  const existingIndex = summaryRows.findIndex((name) => name === summary.warehouse);
+  const emptyIndex = summaryRows.findIndex((name) => !name);
+  const targetRow = existingIndex >= 0
+    ? existingIndex + 2
+    : (emptyIndex >= 0 ? emptyIndex + 2 : 2);
+
+  sheet.getRange(targetRow, SUMMARY_START_COL, 1, 4).setValues([[
+    summary.warehouse,
+    Number(summary.totalFiles || 0),
+    Number(summary.totalFolders || 0),
+    summary.updatedAt || new Date().toISOString(),
+  ]]);
 }
 ```
 
