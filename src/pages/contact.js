@@ -61,7 +61,9 @@ export default function Contact() {
     volume: '',
     materials: '',
     message: '',
+    website: '',
   })
+  const [startedAt, setStartedAt] = useState(Date.now())
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState('')
@@ -111,12 +113,16 @@ export default function Contact() {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formState),
+        body: JSON.stringify({
+          ...formState,
+          startedAt,
+        }),
       })
 
       if (!response.ok) throw new Error('Submission failed')
 
       setIsSubmitted(true)
+      setStartedAt(Date.now())
     } catch (err) {
       setError('There was an error submitting your inquiry. Please try again or email us directly.')
     } finally {
@@ -283,7 +289,9 @@ export default function Contact() {
                         volume: '',
                         materials: '',
                         message: '',
+                        website: '',
                       })
+                      setStartedAt(Date.now())
                     }}
                     className="mt-8 btn-secondary"
                   >
@@ -292,6 +300,16 @@ export default function Contact() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-8">
+                  <input
+                    type="text"
+                    name="website"
+                    value={formState.website}
+                    onChange={handleChange}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    className="hidden"
+                    aria-hidden="true"
+                  />
                   <div className="grid sm:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="name" className="label-text">

@@ -5,6 +5,7 @@ export const RATE_LIMITS = {
   tree: { limit: 20, interval: 60 * 1000 },
   images: { limit: 60, interval: 60 * 1000 },
   sync: { limit: 2, interval: 60 * 1000 },
+  contact: { limit: 3, interval: 60 * 60 * 1000 },
 }
 
 export function checkRateLimit(key, config) {
